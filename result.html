@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartPhish - Security Analysis</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .online {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 38px;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, #2563eb, #9333ea, #ec4899);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .url-box {
+            background: #f5f7ff;
+            padding: 15px;
+            border-radius: 12px;
+            word-break: break-all;
+            margin-bottom: 20px;
+        }
+
+        .risk-box {
+            text-align: center;
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            background: #f5f7ff;
+        }
+
+        .risk {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .score {
+            font-size: 20px;
+            margin-top: 8px;
+            color: #555;
+        }
+
+        .section-title {
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .checks {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .check {
+            padding: 15px;
+            border-radius: 12px;
+            background: #f7f7f7;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .safe {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .warning {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .vt-section {
+            margin-top: 30px;
+            padding: 22px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #f5f7ff, #faf5ff);
+        }
+
+        .vt-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .vt-loading {
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            color: #666;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .stat {
+            background: white;
+            padding: 18px;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        .stat-number {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            background: white;
+            line-height: 1.5;
+        }
+
+        .back-button {
+            display: block;
+            margin: 30px auto 0;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #2563eb, #9333ea);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @media (max-width: 650px) {
+            .checks {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .top {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="top">
+        <div>🛡️ SmartPhish</div>
+        <div class="online">🟢 Scanner Online</div>
+    </div>
+
+    <h1>Security Analysis</h1>
+
+    <div class="subtitle">
+        Phishing URL Detection Results
+    </div>
+
+    <div class="url-box">
+        🔗 <strong>Scanned URL:</strong>
+        <span id="scannedURL">Loading...</span>
+    </div>
+
+    <div class="risk-box">
+
+        <div class="risk" id="riskResult">
+            Analyzing...
+        </div>
+
+        <div class="score" id="scoreResult">
+            Please wait...
+        </div>
+
+    </div>
+
+    <h2 class="section-title">
+        🔍 SmartPhish Detection Checks
+    </h2>
+
+    <div class="checks" id="checksContainer">
+        Loading security checks...
+    </div>
+
+    <div class="vt-section">
+
+        <div class="vt-title">
+            🦠 Online Reputation
+        </div>
+
+        <p>
+            VirusTotal checks the URL against multiple security engines.
+        </p>
+
+        <div id="vtLoading" class="vt-loading">
+            🔄 VirusTotal analysis is running in the background...
+        </div>
+
+        <div id="vtResults" style="display:none;">
+
+            <div class="stats">
+
+                <div class="stat">
+                    <div class="stat-number" id="malicious">0</div>
+                    <div class="stat-label">Malicious</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-number" id="suspicious">0</div>
+                    <div class="stat-label">Suspicious</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-number" id="harmless">0</div>
+                    <div class="stat-label">Harmless</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-number" id="undetected">0</div>
+                    <div class="stat-label">Undetected</div>
+                </div>
+
+            </div>
+
+            <div class="message" id="vtMessage"></div>
+
+        </div>
+
+    </div>
+
+    <button class="back-button" onclick="goBack()">
+        ← Scan Another URL
+    </button>
+
+</div>
+
+<script>
+
+var localResult = null;
+
+function loadLocalResult() {
+
+    var saved = sessionStorage.getItem("smartphishResult");
+
+    if (!saved) {
+
+        document.getElementById("riskResult").innerText =
+            "⚠️ No result found";
+
+        return;
+    }
+
+    localResult = JSON.parse(saved);
+
+    document.getElementById("scannedURL").innerText =
+        localResult.url;
+
+    var calculatedScore = 0;
+
+    for (var i = 0; i < localResult.checks.length; i++) {
+
+        if (!localResult.checks[i].status) {
+            calculatedScore++;
+        }
+
+    }
+
+    var calculatedRisk;
+
+    if (calculatedScore >= 4) {
+
+        calculatedRisk = "HIGH RISK";
+
+    } else if (calculatedScore >= 2) {
+
+        calculatedRisk = "SUSPICIOUS";
+
+    } else {
+
+        calculatedRisk = "LOW RISK";
+
+    }
+
+    document.getElementById("riskResult").innerText =
+        calculatedRisk;
+
+    document.getElementById("scoreResult").innerText =
+        "Detection Score: " +
+        calculatedScore +
+        " / 9";
+
+    if (calculatedScore >= 4) {
+
+        document.getElementById("riskResult").style.color =
+            "#dc2626";
+
+    } else if (calculatedScore >= 2) {
+
+        document.getElementById("riskResult").style.color =
+            "#d97706";
+
+    } else {
+
+        document.getElementById("riskResult").style.color =
+            "#16a34a";
+
+    }
+
+    var container =
+        document.getElementById("checksContainer");
+
+    container.innerHTML = "";
+
+    for (var j = 0; j < localResult.checks.length; j++) {
+
+        var check = localResult.checks[j];
+
+        var div = document.createElement("div");
+
+        div.className = "check";
+
+        if (check.status) {
+
+            div.innerHTML =
+                "<span>" +
+                check.name +
+                "</span>" +
+                "<span class='safe'>✓ Safe</span>";
+
+        } else {
+
+            div.innerHTML =
+                "<span>" +
+                check.name +
+                "</span>" +
+                "<span class='warning'>⚠ Warning</span>";
+
+        }
+
+        container.appendChild(div);
+
+    }
+
+}
+
+function scanWithVirusTotal() {
+
+    if (!localResult) {
+        return;
+    }
+
+    fetch("http://127.0.0.1:5000/scan", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            url: localResult.url
+        })
+
+    })
+
+    .then(function(response) {
+
+        return response.json();
+
+    })
+
+    .then(function(data) {
+
+        sessionStorage.setItem(
+            "virusTotalResult",
+            JSON.stringify(data)
+        );
+
+        displayVirusTotal(data);
+
+    })
+
+    .catch(function(error) {
+
+        console.log("VirusTotal error:", error);
+
+        document.getElementById("vtLoading").innerHTML =
+            "⚠️ VirusTotal could not complete the online analysis.";
+
+    });
+
+}
+
+function displayVirusTotal(data) {
+
+    document.getElementById("vtLoading").style.display =
+        "none";
+
+    document.getElementById("vtResults").style.display =
+        "block";
+
+    if (data.error) {
+
+        document.getElementById("vtMessage").innerHTML =
+            "⚠️ " + data.error;
+
+        return;
+
+    }
+
+    document.getElementById("malicious").innerText =
+        data.malicious || 0;
+
+    document.getElementById("suspicious").innerText =
+        data.suspicious || 0;
+
+    document.getElementById("harmless").innerText =
+        data.harmless || 0;
+
+    document.getElementById("undetected").innerText =
+        data.undetected || 0;
+
+    var message = "";
+
+    if (data.malicious > 0) {
+
+        message =
+            "🚨 VirusTotal reports that one or more security engines flagged this URL. Treat it as potentially unsafe.";
+
+    } else if (data.suspicious > 0) {
+
+        message =
+            "⚠️ Some security engines consider this URL suspicious.";
+
+    } else if (data.status !== "completed") {
+
+        message =
+            "🔄 The VirusTotal analysis may still be processing, so these results may be incomplete.";
+
+    } else {
+
+        message =
+            "✅ No malicious or suspicious detections were returned by the engines included in this analysis. This does not guarantee that the URL is completely safe.";
+
+    }
+
+    document.getElementById("vtMessage").innerHTML =
+        message;
+
+}
+
+function goBack() {
+
+    window.location.href = "index.html";
+
+}
+
+loadLocalResult();
+
+setTimeout(function() {
+
+    scanWithVirusTotal();
+
+}, 100);
+
+</script>
+
+</body>
+</html>
