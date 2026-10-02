@@ -1062,24 +1062,17 @@
             function () {
 
                 fetch(
-                    "https://smartphish-backend.onrender.com/scan",
-                    {
-
-                        method: "POST",
-
-                        headers: {
-
-                            "Content-Type":
-                                "application/json"
-
-                        },
-
-                        body: JSON.stringify({
-
-                            url:
-                                scannedURL
-
-                        })
+    "https://smartphish-backend.onrender.com/scan",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            url: scannedURL
+        })
+    }
+)
 
                     }
 
