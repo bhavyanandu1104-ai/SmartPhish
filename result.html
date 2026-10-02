@@ -1055,112 +1055,115 @@
     /* =========================
        ONLINE VIRUSTOTAL SCAN
     ========================= */
+    /* =========================
+   ONLINE VIRUSTOTAL SCAN
+========================= */
 
-    if (scannedURL) {
+if (scannedURL) {
 
-        setTimeout(
-            function () {
+    setTimeout(function () {
 
-                fetch(
-    "https://smartphish-backend.onrender.com/scan",
-    {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            url: scannedURL
+        fetch(
+            "https://smartphish-backend.onrender.com/scan",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    url: scannedURL
+                })
+            }
+        )
+
+        .then(function (response) {
+
+            return response.json();
+
         })
-    }
-)
 
-                    }
+        .then(function (data) {
 
-                )
+            sessionStorage.setItem(
+                "virusTotalResult",
+                JSON.stringify(data)
+            );
 
-                .then(
-                    function(response) {
+            if (data.success) {
 
-                        return response.json();
+                document.getElementById(
+                    "malicious"
+                ).textContent =
+                    data.malicious || 0;
 
-                    }
-                )
+                document.getElementById(
+                    "suspicious"
+                ).textContent =
+                    data.suspicious || 0;
 
-                .then(
-                    function(data) {
+                document.getElementById(
+                    "harmless"
+                ).textContent =
+                    data.harmless || 0;
 
-                        sessionStorage.setItem(
-                            "virusTotalResult",
-                            JSON.stringify(data)
-                        );
+                document.getElementById(
+                    "undetected"
+                ).textContent =
+                    data.undetected || 0;
 
+                document.getElementById(
+                    "vtStatus"
+                ).textContent =
+                    "✅ Analysis Complete";
 
-                        if (data.success) {
+            }
 
-                            document.getElementById(
-                                "malicious"
-                            ).textContent =
-                                data.malicious || 0;
+            else {
 
+                document.getElementById(
+                    "vtStatus"
+                ).textContent =
+                    "⚠️ Scan Unavailable";
 
-                            document.getElementById(
-                                "suspicious"
-                            ).textContent =
-                                data.suspicious || 0;
+            }
 
+        })
 
-                            document.getElementById(
-                                "harmless"
-                            ).textContent =
-                                data.harmless || 0;
+        .catch(function (error) {
 
+            document.getElementById(
+                "vtStatus"
+            ).textContent =
+                "⚠️ Could not connect";
 
-                            document.getElementById(
-                                "undetected"
-                            ).textContent =
-                                data.undetected || 0;
+            console.log(error);
 
+        });
 
-                            document.getElementById(
-                                "vtStatus"
-                            ).textContent =
-                                "✅ Analysis Complete";
+    }, 100);
 
-                        }
-
-                        else {
-
-                            document.getElementById(
-                                "vtStatus"
-                            ).textContent =
-                                "⚠️ Scan Unavailable";
-
-                        }
-
-                    }
-                )
-
-                .catch(
-                    function(error) {
-
-                        document.getElementById(
-                            "vtStatus"
-                        ).textContent =
-                            "⚠️ Could not connect";
-
-                        console.log(error);
-
-                    }
-                );
-
-            },
-            100
-        );
-
-    }
-
+}
 </script>
-
-</body>
-
+</body> 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
