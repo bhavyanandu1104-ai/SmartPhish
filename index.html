@@ -1,9 +1,9 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>SmartPhish - Phishing Detection</title>
 
     <style>
@@ -16,90 +16,80 @@
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
             min-height: 100vh;
-            padding: 30px;
+            padding: 30px 15px;
         }
 
         .container {
             max-width: 850px;
             margin: auto;
             background: white;
-            border-radius: 25px;
+            border-radius: 22px;
             padding: 30px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
 
-        .navigation {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .navigation a {
-            text-decoration: none;
-            color: #475569;
-            background: #f8fafc;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        .navigation a:hover {
-            background: #e0e7ff;
-            color: #4338ca;
-            transform: translateY(-2px);
-        }
-
-        .navigation .active {
-            background: linear-gradient(90deg, #2563eb, #7c3aed);
-            color: white;
-        }
-
-        .top {
+        .top-bar {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 25px;
-            font-size: 14px;
         }
 
-        .safe {
-            color: #2563eb;
+        .label {
+            background: #f1f5ff;
+            color: #3949ab;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: bold;
         }
 
         .online {
-            color: #16a34a;
-            font-weight: bold;
+            background: #e8f8ee;
+            color: #16803c;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         .shield {
             font-size: 55px;
-            text-align: center;
+            margin-bottom: 10px;
         }
 
         h1 {
-            text-align: center;
-            font-size: 42px;
-            margin: 5px 0;
-            background: linear-gradient(90deg, #2563eb, #9333ea, #ec4899);
-            -webkit-background-clip: text;
-            color: transparent;
+            margin: 0;
+            font-size: 38px;
+            color: #222;
         }
 
         .subtitle {
-            text-align: center;
-            font-size: 20px;
+            color: #667eea;
+            font-size: 18px;
             font-weight: bold;
-            color: #444;
+            margin-top: 8px;
         }
 
         .description {
-            text-align: center;
-            color: #777;
-            margin-bottom: 30px;
+            color: #666;
+            line-height: 1.6;
+            max-width: 650px;
+            margin: 15px auto;
+        }
+
+        .scan-box {
+            background: #f7f8ff;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 25px;
+        }
+
+        .scan-box h2 {
+            margin-top: 0;
+            color: #333;
         }
 
         .input-area {
@@ -109,10 +99,10 @@
 
         input {
             flex: 1;
-            padding: 16px;
+            padding: 15px;
             border: 2px solid #ddd;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             outline: none;
         }
 
@@ -121,12 +111,12 @@
         }
 
         button {
-            padding: 16px 22px;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(90deg, #2563eb, #9333ea);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            font-size: 16px;
+            padding: 15px 22px;
+            border-radius: 12px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -140,65 +130,65 @@
             cursor: not-allowed;
         }
 
-        #result {
+        .result {
             margin-top: 20px;
-            padding: 18px;
-            background: #f5f7ff;
-            border-radius: 12px;
-            text-align: center;
-            color: #555;
+            padding: 20px;
+            border-radius: 15px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .history {
-            margin-top: 30px;
+            margin-top: 25px;
         }
 
-        .history-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .clear-btn {
-            padding: 8px 12px;
-            font-size: 13px;
-            background: #ef4444;
-        }
-
-        #historyList {
-            margin-top: 10px;
+        .history h2 {
+            color: #333;
         }
 
         .history-item {
-            padding: 10px;
-            margin-top: 7px;
-            background: #f7f7f7;
-            border-radius: 8px;
+            background: #f7f8ff;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 10px;
             font-size: 14px;
             word-break: break-all;
         }
 
         .features {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            margin-top: 30px;
+            margin-top: 25px;
         }
 
         .feature {
-            flex: 1;
+            background: #f7f8ff;
             padding: 20px;
             border-radius: 15px;
-            background: linear-gradient(135deg, #f5f7ff, #faf5ff);
             text-align: center;
         }
 
+        .feature-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
         .feature h3 {
-            margin-bottom: 8px;
+            margin: 5px 0;
+            color: #333;
         }
 
         .feature p {
+            font-size: 13px;
             color: #666;
-            font-size: 14px;
+            line-height: 1.5;
         }
 
         footer {
@@ -209,17 +199,25 @@
         }
 
         @media (max-width: 650px) {
+
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
             .input-area {
                 flex-direction: column;
             }
 
-            .features {
-                flex-direction: column;
+            button {
+                width: 100%;
             }
 
-            .top {
-                flex-direction: column;
-                gap: 8px;
+            .features {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -229,74 +227,69 @@
 
 <div class="container">
 
-    <div class="navigation">
+    <div class="top-bar">
+        <div class="label">🛡️ Safer Browsing</div>
+        <div class="label online">🟢 Scanner Online</div>
+    </div>
 
-        <a href="index.html" class="active">
-            🏠 Home
-        </a>
+    <div class="hero">
 
-        <a href="index.html">
-            🔍 Scan URL
-        </a>
+        <div class="shield">🛡️</div>
 
-        <a href="result.html">
-            📊 Results
-        </a>
+        <h1>SmartPhish</h1>
 
-        <a href="about.html">
-            ℹ️ About & Safety
-        </a>
+        <div class="subtitle">
+            Phishing URL Detection System
+        </div>
+
+        <p class="description">
+            Protect yourself from suspicious websites.
+            Enter a website URL below and SmartPhish will analyze
+            it for common phishing warning signs.
+        </p>
 
     </div>
 
-    <div class="top">
-        <div class="safe">🛡️ Safer Browsing</div>
-        <div class="online">🟢 Scanner Online</div>
-    </div>
 
-    <div class="shield">🛡️</div>
+    <div class="scan-box">
 
-    <h1>SmartPhish</h1>
+        <h2>🔍 Scan a Website URL</h2>
 
-    <div class="subtitle">
-        Phishing URL Detection System
-    </div>
+        <div class="input-area">
 
-    <p class="description">
-        Protect yourself from suspicious websites using intelligent URL analysis.
-    </p>
-
-    <div class="input-area">
-
-        <input
-            type="text"
-            id="urlInput"
-            placeholder="🔗 Enter website URL here..."
-        >
-
-        <button id="scanButton" onclick="checkURL()">
-            🔍 Scan URL
-        </button>
-
-    </div>
-
-    <div id="result">
-        🛡️ Ready to scan
-    </div>
-
-    <div class="history">
-
-        <div class="history-title">
-
-            <h2>📋 Scan History</h2>
+            <input
+                type="text"
+                id="urlInput"
+                placeholder="🔗 Enter website URL here..."
+            >
 
             <button
-                class="clear-btn"
-                onclick="clearHistory()">
-                Clear History
+                id="scanButton"
+                onclick="checkURL()"
+            >
+                Scan URL
             </button>
 
         </div>
+
+        <div class="result" id="result">
+
+            <div class="result-title">
+                🛡️ Ready to scan
+            </div>
+
+            <div>
+                Enter a website URL to begin the security analysis.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="history">
+
+        <h2>📋 Scan History</h2>
 
         <div id="historyList">
             No scans yet.
@@ -304,30 +297,49 @@
 
     </div>
 
+
     <div class="features">
 
         <div class="feature">
-            <h3>⚡ Fast Detection</h3>
+
+            <div class="feature-icon">⚡</div>
+
+            <h3>Fast Detection</h3>
+
             <p>
-                Quickly analyze common URL warning signs.
+                Quickly checks URLs for common phishing indicators.
             </p>
+
         </div>
 
-        <div class="feature">
-            <h3>🔒 Secure Analysis</h3>
-            <p>
-                Analyze the URL without opening the website.
-            </p>
-        </div>
 
         <div class="feature">
-            <h3>🤖 Smart Detection</h3>
+
+            <div class="feature-icon">🔒</div>
+
+            <h3>Secure Analysis</h3>
+
             <p>
-                Uses multiple rules to identify suspicious characteristics.
+                Uses security checks to identify suspicious URL patterns.
             </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">🧠</div>
+
+            <h3>Smart Detection</h3>
+
+            <p>
+                Combines multiple URL-based rules to calculate risk.
+            </p>
+
         </div>
 
     </div>
+
 
     <footer>
         SmartPhish © 2026 | Computer Science Student Project
@@ -341,163 +353,192 @@
 var scanHistory = [];
 
 
-/* =========================
-   LOAD HISTORY
-========================= */
+/* --------------------------------
+   LOAD PREVIOUS HISTORY
+-------------------------------- */
 
-function loadHistory() {
+try {
 
-    var savedHistory =
-        sessionStorage.getItem("smartphishHistory");
+    var savedHistory = sessionStorage.getItem("smartphishHistory");
 
     if (savedHistory) {
-
-        try {
-
-            scanHistory =
-                JSON.parse(savedHistory);
-
-        } catch (error) {
-
-            scanHistory = [];
-
-        }
-
+        scanHistory = JSON.parse(savedHistory);
     }
 
-    displayHistory();
+} catch (error) {
+
+    scanHistory = [];
+
 }
 
 
-/* =========================
-   MAIN SCAN
-========================= */
+/* --------------------------------
+   DISPLAY HISTORY
+-------------------------------- */
+
+function displayHistory() {
+
+    var historyList = document.getElementById("historyList");
+
+    if (scanHistory.length === 0) {
+
+        historyList.innerHTML = "No scans yet.";
+
+        return;
+    }
+
+    historyList.innerHTML = "";
+
+    scanHistory.forEach(function(item) {
+
+        var div = document.createElement("div");
+
+        div.className = "history-item";
+
+        div.innerHTML =
+            "<strong>" + item.risk + "</strong> — " +
+            item.score + "/9<br>" +
+            item.url;
+
+        historyList.appendChild(div);
+
+    });
+
+}
+
+
+/* --------------------------------
+   MAIN SCAN FUNCTION
+-------------------------------- */
 
 function checkURL() {
 
-    var input =
-        document.getElementById("urlInput");
+    var input = document.getElementById("urlInput");
 
-    var button =
-        document.getElementById("scanButton");
+    var button = document.getElementById("scanButton");
 
-    var result =
-        document.getElementById("result");
+    var result = document.getElementById("result");
 
-    var url =
-        input.value.trim();
+    var url = input.value.trim();
 
 
-    if (url === "") {
+    /* Empty URL */
 
-        result.innerHTML =
-            "⚠️ Please enter a URL.";
+    if (!url) {
+
+        result.innerHTML = `
+            <div class="result-title">
+                ⚠️ Please enter a URL
+            </div>
+            <div>
+                Enter a website address to scan.
+            </div>
+        `;
 
         return;
-
     }
 
 
-    /* Add https if user did not enter protocol */
+    /* --------------------------------
+       FIX URL FORMAT
+    -------------------------------- */
 
-    if (
-        !url.startsWith("http://") &&
-        !url.startsWith("https://")
-    ) {
+    url = url.trim();
+
+
+    /*
+       Fix incorrect protocol formats such as:
+
+       https://https://example.com
+       https://http//:example.com
+       http//:example.com
+    */
+
+    url = url.replace(
+        /^https?:\/\/https?:\/\//i,
+        "https://"
+    );
+
+    url = url.replace(
+        /^https?:\/\/http\/\/:/i,
+        "https://"
+    );
+
+    url = url.replace(
+        /^http\/\/:/i,
+        "https://"
+    );
+
+
+    /*
+       Add HTTPS when the user enters:
+
+       google.com
+
+       instead of:
+
+       https://google.com
+    */
+
+    if (!/^https?:\/\//i.test(url)) {
 
         url = "https://" + url;
 
     }
 
 
-    result.innerHTML =
-        "⚡ Analyzing URL...";
-
-    button.disabled = true;
-
-    button.textContent =
-        "⏳ Scanning...";
+    console.log("Final URL:", url);
 
 
-    /* =========================
-       SMARTPHISH RULE ANALYSIS
-    ========================= */
+    /* --------------------------------
+       URL ANALYSIS
+    -------------------------------- */
+
+    var lowerURL = url.toLowerCase();
 
     var score = 0;
 
-    var checks = [];
 
-    var lowerURL =
-        url.toLowerCase();
+    /* Rule 1 — HTTPS */
 
+    var hasHTTPS = lowerURL.startsWith("https://");
 
-    /* 1. HTTPS */
-
-    var https =
-        lowerURL.startsWith("https://");
-
-    if (!https) {
+    if (!hasHTTPS) {
         score++;
     }
 
-    checks.push({
-        name: "HTTPS",
-        status: https
-    });
 
+    /* Rule 2 — URL length */
 
-    /* 2. URL LENGTH */
+    var longURL = url.length > 75;
 
-    var lengthSafe =
-        url.length <= 75;
-
-    if (!lengthSafe) {
+    if (longURL) {
         score++;
     }
 
-    checks.push({
-        name: "URL Length",
-        status: lengthSafe
-    });
 
+    /* Rule 3 — @ symbol */
 
-    /* 3. @ SYMBOL */
+    var hasAtSymbol = url.includes("@");
 
-    var atSafe =
-        !url.includes("@");
-
-    if (!atSafe) {
+    if (hasAtSymbol) {
         score++;
     }
 
-    checks.push({
-        name: "@ Symbol",
-        status: atSafe
-    });
 
-
-    /* 4. IP ADDRESS */
+    /* Rule 4 — IP address */
 
     var ipPattern =
-        /https?:\/\/(\d{1,3}\.){3}\d{1,3}/;
+        /^(https?:\/\/)?(\d{1,3}\.){3}\d{1,3}/;
 
-    var hasIP =
-        ipPattern.test(lowerURL);
+    var hasIPAddress = ipPattern.test(url);
 
-    var ipSafe =
-        !hasIP;
-
-    if (hasIP) {
+    if (hasIPAddress) {
         score++;
     }
 
-    checks.push({
-        name: "IP Address",
-        status: ipSafe
-    });
 
-
-    /* 5. SUSPICIOUS WORDS */
+    /* Rule 5 — Suspicious words */
 
     var suspiciousWords = [
         "login",
@@ -512,190 +553,161 @@ function checkURL() {
 
     var foundWords = [];
 
-    for (
-        var i = 0;
-        i < suspiciousWords.length;
-        i++
-    ) {
+    suspiciousWords.forEach(function(word) {
 
-        if (
-            lowerURL.includes(
-                suspiciousWords[i]
-            )
-        ) {
+        if (lowerURL.includes(word)) {
 
-            foundWords.push(
-                suspiciousWords[i]
-            );
+            foundWords.push(word);
 
         }
 
-    }
-
-    var wordsSafe =
-        foundWords.length === 0;
-
-    if (foundWords.length > 0) {
-
-        score += Math.min(
-            foundWords.length,
-            2
-        );
-
-    }
-
-    checks.push({
-        name: "Suspicious Words",
-        status: wordsSafe
     });
 
 
-    /* 6. MULTIPLE HYPHENS */
+    score += Math.min(foundWords.length, 2);
+
+
+    /* Rule 6 — Hyphens */
 
     var hyphenCount =
         (url.match(/-/g) || []).length;
 
-    var hyphenSafe =
-        hyphenCount < 3;
+    var tooManyHyphens = hyphenCount >= 3;
 
-    if (!hyphenSafe) {
+    if (tooManyHyphens) {
         score++;
     }
 
-    checks.push({
-        name: "Multiple Hyphens",
-        status: hyphenSafe
-    });
 
+    /* Rule 7 — Unusual dots */
 
-    /* 7. UNUSUAL DOTS */
+    var unusualDots = url.includes("..");
 
-    var dotsSafe =
-        !url.includes("..");
-
-    if (!dotsSafe) {
+    if (unusualDots) {
         score++;
     }
 
-    checks.push({
-        name: "Unusual Dots",
-        status: dotsSafe
-    });
 
+    /* Rule 8 — URL shortener */
 
-    /* 8. URL SHORTENER */
-
-    var shorteners = [
+    var shortenerDomains = [
         "bit.ly",
         "tinyurl.com",
         "t.co",
         "is.gd"
     ];
 
-    var shortened = false;
+    var isShortener = false;
 
-    for (
-        var j = 0;
-        j < shorteners.length;
-        j++
-    ) {
+    shortenerDomains.forEach(function(domain) {
 
-        if (
-            lowerURL.includes(
-                shorteners[j]
-            )
-        ) {
-
-            shortened = true;
-            break;
-
+        if (lowerURL.includes(domain)) {
+            isShortener = true;
         }
 
-    }
+    });
 
-    var shortenerSafe =
-        !shortened;
-
-    if (shortened) {
+    if (isShortener) {
         score++;
     }
 
-    checks.push({
-        name: "URL Shortener",
-        status: shortenerSafe
-    });
 
+    /* Rule 9 — Excessive subdomains */
 
-    /* 9. EXCESSIVE SUBDOMAINS */
+    var withoutProtocol =
+        url.replace(/^https?:\/\//i, "");
 
     var domainPart =
-        lowerURL
-        .replace(/^https?:\/\//, "")
-        .split("/")[0];
+        withoutProtocol.split("/")[0];
 
     var domainParts =
         domainPart.split(".");
 
-    var subdomainSafe =
-        domainParts.length <= 4;
+    var excessiveSubdomains =
+        domainParts.length > 4;
 
-    if (!subdomainSafe) {
+    if (excessiveSubdomains) {
         score++;
     }
 
-    checks.push({
-        name: "Subdomains",
-        status: subdomainSafe
-    });
+
+    /* --------------------------------
+       LIMIT SCORE
+    -------------------------------- */
+
+    if (score > 9) {
+        score = 9;
+    }
 
 
-    /* =========================
+    /* --------------------------------
        RISK LEVEL
-    ========================= */
+    -------------------------------- */
 
-    var risk;
+    var risk = "";
+
+    var riskMessage = "";
 
     if (score >= 4) {
 
         risk = "HIGH RISK";
 
-    } else if (score >= 2) {
+        riskMessage =
+            "This URL contains several suspicious indicators.";
+
+    }
+    else if (score >= 2) {
 
         risk = "SUSPICIOUS";
 
-    } else {
+        riskMessage =
+            "This URL contains some warning signs.";
+
+    }
+    else {
 
         risk = "LOW RISK";
+
+        riskMessage =
+            "No major suspicious indicators were detected.";
 
     }
 
 
-    /* =========================
-       SAVE RESULT
-    ========================= */
+    /* --------------------------------
+       SHOW RESULT
+    -------------------------------- */
 
-    var localResult = {
+    result.innerHTML = `
 
-        url: url,
+        <div class="result-title">
+            ${risk}
+        </div>
 
-        score: score,
+        <p>
+            <strong>Risk Score:</strong>
+            ${score}/9
+        </p>
 
-        risk: risk,
+        <p>
+            ${riskMessage}
+        </p>
 
-        checks: checks
+        <p>
+            <strong>Scanned URL:</strong><br>
+            ${url}
+        </p>
 
-    };
+        <p>
+            🔍 Analyzing URL security indicators...
+        </p>
+
+    `;
 
 
-    sessionStorage.setItem(
-        "smartphishResult",
-        JSON.stringify(localResult)
-    );
-
-
-    /* =========================
-       PREVENT DUPLICATE HISTORY
-    ========================= */
+    /* --------------------------------
+       SAVE HISTORY
+    -------------------------------- */
 
     var alreadyExists =
         scanHistory.some(function(item) {
@@ -717,123 +729,119 @@ function checkURL() {
 
         });
 
-    }
 
+        try {
 
-    sessionStorage.setItem(
-        "smartphishHistory",
-        JSON.stringify(scanHistory)
-    );
+            sessionStorage.setItem(
+                "smartphishHistory",
+                JSON.stringify(scanHistory)
+            );
 
+        } catch (error) {
 
-    /* =========================
-       SHOW RESULT PAGE
-    ========================= */
+            console.log(
+                "Could not save history."
+            );
 
-    result.innerHTML =
-        "✅ SmartPhish analysis complete. Opening results...";
-
-
-    window.location.href =
-        "result.html?url=" +
-        encodeURIComponent(url);
-
-}
-
-
-/* =========================
-   DISPLAY HISTORY
-========================= */
-
-function displayHistory() {
-
-    var historyList =
-        document.getElementById("historyList");
-
-
-    if (scanHistory.length === 0) {
-
-        historyList.innerHTML =
-            "No scans yet.";
-
-        return;
+        }
 
     }
 
-
-    historyList.innerHTML = "";
-
-
-    for (
-        var i = scanHistory.length - 1;
-        i >= 0;
-        i--
-    ) {
-
-        var item =
-            document.createElement("div");
-
-        item.className =
-            "history-item";
-
-
-        item.textContent =
-            "🔗 " +
-            scanHistory[i].url +
-            " — " +
-            scanHistory[i].risk +
-            " (" +
-            scanHistory[i].score +
-            "/9)";
-
-
-        historyList.appendChild(item);
-
-    }
-
-}
-
-
-/* =========================
-   CLEAR HISTORY
-========================= */
-
-function clearHistory() {
-
-    scanHistory = [];
-
-    sessionStorage.removeItem(
-        "smartphishHistory"
-    );
 
     displayHistory();
 
+
+    /* --------------------------------
+       SAVE RESULT FOR RESULT PAGE
+    -------------------------------- */
+
+    var smartPhishResult = {
+
+        url: url,
+
+        score: score,
+
+        risk: risk,
+
+        https: hasHTTPS,
+
+        longURL: longURL,
+
+        atSymbol: hasAtSymbol,
+
+        ipAddress: hasIPAddress,
+
+        suspiciousWords: foundWords,
+
+        hyphens: tooManyHyphens,
+
+        unusualDots: unusualDots,
+
+        shortener: isShortener,
+
+        excessiveSubdomains: excessiveSubdomains
+
+    };
+
+
+    try {
+
+        sessionStorage.setItem(
+            "smartphishResult",
+            JSON.stringify(smartPhishResult)
+        );
+
+    } catch (error) {
+
+        console.log(
+            "Could not save scan result."
+        );
+
+    }
+
+
+    /* --------------------------------
+       OPEN RESULT PAGE
+    -------------------------------- */
+
+    button.disabled = true;
+
+    button.innerText = "Scanning...";
+
+
+    setTimeout(function() {
+
+        window.location.href =
+            "result.html?url=" +
+            encodeURIComponent(url);
+
+    }, 500);
+
 }
 
 
-/* =========================
-   START
-========================= */
-
-loadHistory();
-
-
-/* Enter key also starts scan */
+/* --------------------------------
+   ENTER KEY SUPPORT
+-------------------------------- */
 
 document
     .getElementById("urlInput")
-    .addEventListener(
-        "keydown",
-        function(event) {
+    .addEventListener("keydown", function(event) {
 
-            if (event.key === "Enter") {
+        if (event.key === "Enter") {
 
-                checkURL();
-
-            }
+            checkURL();
 
         }
-    );
+
+    });
+
+
+/* --------------------------------
+   INITIAL HISTORY DISPLAY
+-------------------------------- */
+
+displayHistory();
 
 </script>
 
