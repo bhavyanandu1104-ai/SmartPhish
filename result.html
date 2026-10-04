@@ -1,1169 +1,1382 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
-<title>SmartPhish - Security Analysis</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<style>
+    <title>SmartPhish - Security Analysis</title>
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
+    <style>
 
-    body {
-        min-height: 100vh;
-        background:
-            radial-gradient(circle at 10% 10%, #38bdf8 0%, transparent 25%),
-            radial-gradient(circle at 90% 10%, #c084fc 0%, transparent 25%),
-            radial-gradient(circle at 80% 90%, #818cf8 0%, transparent 25%),
-            linear-gradient(135deg, #e0f2fe, #f5f3ff);
-
-        padding: 30px;
-    }
-
-    .container {
-        width: 100%;
-        max-width: 1050px;
-        margin: auto;
-
-        background: rgba(255, 255, 255, 0.96);
-
-        border-radius: 28px;
-
-        padding: 35px;
-
-        box-shadow:
-            0 25px 60px rgba(79, 70, 229, 0.18);
-    }
-
-    /* HEADER */
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        margin-bottom: 30px;
-    }
-
-    .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .brand-icon {
-        width: 48px;
-        height: 48px;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        border-radius: 14px;
-
-        font-size: 25px;
-
-        background:
-            linear-gradient(
-                135deg,
-                #06b6d4,
-                #2563eb,
-                #7c3aed
-            );
-    }
-
-    .brand h2 {
-        color: #1e293b;
-        font-size: 22px;
-    }
-
-    .brand p {
-        color: #64748b;
-        font-size: 13px;
-        margin-top: 3px;
-    }
-
-    .online {
-        background: #dcfce7;
-        color: #15803d;
-
-        padding: 9px 15px;
-
-        border-radius: 20px;
-
-        font-size: 13px;
-        font-weight: bold;
-    }
-
-    /* TITLE */
-
-    .title {
-        text-align: center;
-        margin-bottom: 25px;
-    }
-
-    .title h1 {
-        font-size: 38px;
-
-        background:
-            linear-gradient(
-                90deg,
-                #2563eb,
-                #7c3aed,
-                #db2777
-            );
-
-        -webkit-background-clip: text;
-        color: transparent;
-
-        margin-bottom: 8px;
-    }
-
-    .title p {
-        color: #64748b;
-    }
-
-    /* URL */
-
-    .url-card {
-        background: #f8fafc;
-
-        border: 1px solid #e2e8f0;
-
-        border-radius: 16px;
-
-        padding: 18px;
-
-        margin-bottom: 25px;
-    }
-
-    .url-label {
-        color: #64748b;
-        font-size: 13px;
-        margin-bottom: 8px;
-    }
-
-    .url-text {
-        color: #1e293b;
-        font-weight: bold;
-
-        word-break: break-all;
-    }
-
-    /* RISK PANEL */
-
-    .risk-panel {
-        display: grid;
-
-        grid-template-columns: 220px 1fr;
-
-        gap: 25px;
-
-        padding: 25px;
-
-        border-radius: 20px;
-
-        margin-bottom: 30px;
-
-        border: 1px solid #e2e8f0;
-    }
-
-    .risk-circle {
-        width: 170px;
-        height: 170px;
-
-        border-radius: 50%;
-
-        margin: auto;
-
-        display: flex;
-        flex-direction: column;
-
-        justify-content: center;
-        align-items: center;
-
-        border: 12px solid #22c55e;
-
-        background: white;
-
-        box-shadow:
-            0 10px 30px rgba(0,0,0,0.08);
-    }
-
-    .risk-circle .score {
-        font-size: 34px;
-        font-weight: bold;
-        color: #1e293b;
-    }
-
-    .risk-circle span {
-        font-size: 13px;
-        color: #64748b;
-    }
-
-    .risk-info {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .risk-badge {
-        display: inline-block;
-
-        width: fit-content;
-
-        padding: 9px 16px;
-
-        border-radius: 20px;
-
-        font-weight: bold;
-
-        margin-bottom: 12px;
-    }
-
-    .risk-info h2 {
-        color: #1e293b;
-        margin-bottom: 8px;
-    }
-
-    .risk-info p {
-        color: #64748b;
-        line-height: 1.6;
-    }
-
-    .progress {
-        width: 100%;
-
-        height: 12px;
-
-        background: #e2e8f0;
-
-        border-radius: 20px;
-
-        overflow: hidden;
-
-        margin-top: 18px;
-    }
-
-    .progress-bar {
-        height: 100%;
-
-        width: 0%;
-
-        border-radius: 20px;
-
-        transition: width 0.8s ease;
-    }
-
-    /* SECTION */
-
-    .section-title {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        color: #1e293b;
-
-        margin-bottom: 15px;
-    }
-
-    /* CHECKS */
-
-    .checks {
-        display: grid;
-
-        grid-template-columns:
-            repeat(3, 1fr);
-
-        gap: 14px;
-
-        margin-bottom: 30px;
-    }
-
-    .check-card {
-        background: #f8fafc;
-
-        border: 1px solid #e2e8f0;
-
-        border-radius: 15px;
-
-        padding: 17px;
-
-        transition: 0.25s;
-    }
-
-    .check-card:hover {
-        transform: translateY(-3px);
-
-        box-shadow:
-            0 8px 20px rgba(0,0,0,0.07);
-    }
-
-    .check-name {
-        color: #475569;
-        font-size: 13px;
-        margin-bottom: 8px;
-    }
-
-    .check-status {
-        font-weight: bold;
-    }
-
-    /* VIRUSTOTAL */
-
-    .vt-section {
-        background:
-            linear-gradient(
-                135deg,
-                #eff6ff,
-                #f5f3ff
-            );
-
-        border: 1px solid #dbeafe;
-
-        border-radius: 20px;
-
-        padding: 25px;
-
-        margin-bottom: 25px;
-    }
-
-    .vt-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        margin-bottom: 20px;
-    }
-
-    .vt-header h2 {
-        color: #1e293b;
-    }
-
-    .vt-status {
-        color: #2563eb;
-        font-size: 13px;
-        font-weight: bold;
-    }
-
-    .vt-grid {
-        display: grid;
-
-        grid-template-columns:
-            repeat(4, 1fr);
-
-        gap: 12px;
-    }
-
-    .vt-card {
-        background: white;
-
-        border-radius: 14px;
-
-        padding: 18px;
-
-        text-align: center;
-
-        border: 1px solid #e2e8f0;
-    }
-
-    .vt-number {
-        font-size: 27px;
-        font-weight: bold;
-
-        color: #1e293b;
-
-        margin-bottom: 5px;
-    }
-
-    .vt-label {
-        font-size: 12px;
-        color: #64748b;
-    }
-
-    /* BUTTONS */
-
-    .buttons {
-        display: flex;
-        gap: 12px;
-    }
-
-    .back-button {
-        flex: 1;
-
-        padding: 16px;
-
-        border: none;
-
-        border-radius: 13px;
-
-        cursor: pointer;
-
-        font-size: 16px;
-
-        font-weight: bold;
-
-        color: white;
-
-        background:
-            linear-gradient(
-                90deg,
-                #06b6d4,
-                #2563eb,
-                #7c3aed
-            );
-
-        transition: 0.25s;
-    }
-
-    .back-button:hover {
-        transform: translateY(-2px);
-
-        box-shadow:
-            0 10px 25px rgba(37,99,235,0.25);
-    }
-
-    .footer {
-        text-align: center;
-
-        margin-top: 25px;
-        padding-top: 20px;
-
-        border-top: 1px solid #e2e8f0;
-
-        color: #94a3b8;
-
-        font-size: 12px;
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 750px) {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
         body {
-            padding: 15px;
+            min-height: 100vh;
+
+            background:
+                radial-gradient(circle at 10% 10%, #38bdf8 0%, transparent 25%),
+                radial-gradient(circle at 90% 10%, #c084fc 0%, transparent 25%),
+                radial-gradient(circle at 80% 90%, #818cf8 0%, transparent 25%),
+                linear-gradient(135deg, #e0f2fe, #f5f3ff);
+
+            padding: 30px;
         }
 
         .container {
-            padding: 22px;
+            width: 100%;
+            max-width: 1050px;
+            margin: auto;
+
+            background: rgba(255, 255, 255, 0.96);
+
+            border-radius: 28px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 25px 60px rgba(79, 70, 229, 0.18);
         }
 
+        /* NAVIGATION */
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .navigation a {
+            text-decoration: none;
+            color: #475569;
+            background: #f8fafc;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .navigation a:hover {
+            background: #e0e7ff;
+            color: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        .navigation .active {
+            background:
+                linear-gradient(
+                    90deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
+            color: white;
+        }
+
+        /* HEADER */
+
         .header {
-            flex-direction: column;
-            gap: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 14px;
+
+            font-size: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #06b6d4,
+                    #2563eb,
+                    #7c3aed
+                );
+        }
+
+        .brand h2 {
+            color: #1e293b;
+            font-size: 22px;
+        }
+
+        .brand p {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        .online {
+            background: #dcfce7;
+            color: #15803d;
+
+            padding: 9px 15px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* TITLE */
+
+        .title {
+            text-align: center;
+            margin-bottom: 25px;
         }
 
         .title h1 {
-            font-size: 30px;
+            font-size: 38px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #2563eb,
+                    #7c3aed,
+                    #db2777
+                );
+
+            -webkit-background-clip: text;
+            color: transparent;
+
+            margin-bottom: 8px;
         }
 
+        .title p {
+            color: #64748b;
+        }
+
+        /* URL */
+
+        .url-card {
+            background: #f8fafc;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 16px;
+
+            padding: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .url-label {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .url-text {
+            color: #1e293b;
+            font-weight: bold;
+
+            word-break: break-all;
+        }
+
+        /* RISK PANEL */
+
         .risk-panel {
-            grid-template-columns: 1fr;
-            text-align: center;
+            display: grid;
+
+            grid-template-columns: 220px 1fr;
+
+            gap: 25px;
+
+            padding: 25px;
+
+            border-radius: 20px;
+
+            margin-bottom: 30px;
+
+            border: 1px solid #e2e8f0;
+        }
+
+        .risk-circle {
+            width: 170px;
+            height: 170px;
+
+            border-radius: 50%;
+
+            margin: auto;
+
+            display: flex;
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+
+            border: 12px solid #22c55e;
+
+            background: white;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .risk-circle .score {
+            font-size: 34px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .risk-circle span {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .risk-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .risk-badge {
-            margin-left: auto;
-            margin-right: auto;
+            display: inline-block;
+
+            width: fit-content;
+
+            padding: 9px 16px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
         }
 
+        .risk-info h2 {
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .risk-info p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .progress {
+            width: 100%;
+
+            height: 12px;
+
+            background: #e2e8f0;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            margin-top: 18px;
+        }
+
+        .progress-bar {
+            height: 100%;
+
+            width: 0%;
+
+            border-radius: 20px;
+
+            transition: width 0.8s ease;
+        }
+
+        /* SECTION */
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: #1e293b;
+
+            margin-bottom: 15px;
+        }
+
+        /* CHECKS */
+
         .checks {
-            grid-template-columns: 1fr;
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 14px;
+
+            margin-bottom: 30px;
+        }
+
+        .check-card {
+            background: #f8fafc;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 15px;
+
+            padding: 17px;
+
+            transition: 0.25s;
+        }
+
+        .check-card:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,0.07);
+        }
+
+        .check-name {
+            color: #475569;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .check-status {
+            font-weight: bold;
+        }
+
+        /* VIRUSTOTAL */
+
+        .vt-section {
+            background:
+                linear-gradient(
+                    135deg,
+                    #eff6ff,
+                    #f5f3ff
+                );
+
+            border: 1px solid #dbeafe;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+        }
+
+        .vt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .vt-header h2 {
+            color: #1e293b;
+        }
+
+        .vt-status {
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: right;
         }
 
         .vt-grid {
-            grid-template-columns:
-                repeat(2, 1fr);
-        }
-    }
+            display: grid;
 
-</style>
-```
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 12px;
+        }
+
+        .vt-card {
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 18px;
+
+            text-align: center;
+
+            border: 1px solid #e2e8f0;
+        }
+
+        .vt-number {
+            font-size: 27px;
+            font-weight: bold;
+
+            color: #1e293b;
+
+            margin-bottom: 5px;
+        }
+
+        .vt-label {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* ERROR BOX */
+
+        .error-box {
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            background: #fff1f2;
+
+            border: 1px solid #fecdd3;
+
+            color: #be123c;
+
+            font-size: 13px;
+
+            word-break: break-word;
+        }
+
+        /* BUTTON */
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .back-button {
+            flex: 1;
+
+            padding: 16px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #06b6d4,
+                    #2563eb,
+                    #7c3aed
+                );
+
+            transition: 0.25s;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px rgba(37,99,235,0.25);
+        }
+
+        .footer {
+            text-align: center;
+
+            margin-top: 25px;
+            padding-top: 20px;
+
+            border-top: 1px solid #e2e8f0;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 750px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 22px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .title h1 {
+                font-size: 30px;
+            }
+
+            .risk-panel {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .risk-badge {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .checks {
+                grid-template-columns: 1fr;
+            }
+
+            .vt-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .vt-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+        }
+
+    </style>
 
 </head>
+
 
 <body>
 
 <div class="container">
 
-```
-<!-- HEADER -->
 
-<div class="header">
+    <!-- HEADER -->
 
-    <div class="brand">
+    <div class="header">
 
-        <div class="brand-icon">
-            🛡️
+        <div class="brand">
+
+            <div class="brand-icon">
+                🛡️
+            </div>
+
+            <div>
+
+                <h2>SmartPhish</h2>
+
+                <p>
+                    Security Analysis System
+                </p>
+
+            </div>
+
         </div>
+
+
+        <div class="online">
+            🟢 Scanner Online
+        </div>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
+
+    <div class="navigation">
+
+        <a href="index.html">
+            🏠 Home
+        </a>
+
+        <a href="index.html">
+            🔍 Scan URL
+        </a>
+
+        <a href="result.html" class="active">
+            📊 Results
+        </a>
+
+        <a href="about.html">
+            ℹ️ About & Safety
+        </a>
+
+    </div>
+
+
+    <!-- TITLE -->
+
+    <div class="title">
+
+        <h1>
+            Security Analysis Report
+        </h1>
+
+        <p>
+            Phishing URL detection and reputation analysis
+        </p>
+
+    </div>
+
+
+    <!-- URL -->
+
+    <div class="url-card">
+
+        <div class="url-label">
+            🔗 SCANNED URL
+        </div>
+
+        <div
+            class="url-text"
+            id="scannedURL">
+
+            Loading...
+
+        </div>
+
+    </div>
+
+
+    <!-- RISK PANEL -->
+
+    <div
+        class="risk-panel"
+        id="riskPanel">
 
         <div>
 
-            <h2>SmartPhish</h2>
+            <div
+                class="risk-circle"
+                id="riskCircle">
 
-            <p>Security Analysis System</p>
+                <div
+                    class="score"
+                    id="score">
+
+                    0/9
+
+                </div>
+
+                <span>
+                    Risk Score
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="risk-info">
+
+            <div
+                class="risk-badge"
+                id="riskBadge">
+
+                ANALYZING
+
+            </div>
+
+
+            <h2 id="riskTitle">
+
+                Security Analysis
+
+            </h2>
+
+
+            <p id="riskMessage">
+
+                Analyzing the submitted URL...
+
+            </p>
+
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="progressBar">
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
-    <div class="online">
-        🟢 Scanner Online
-    </div>
 
-</div>
+    <!-- DETECTION CHECKS -->
 
+    <h2 class="section-title">
 
-<!-- TITLE -->
+        🔍 Detection Checks
 
-<div class="title">
+    </h2>
 
-    <h1>Security Analysis Report</h1>
-
-    <p>
-        Phishing URL detection and reputation analysis
-    </p>
-
-</div>
-
-
-<!-- URL -->
-
-<div class="url-card">
-
-    <div class="url-label">
-        🔗 SCANNED URL
-    </div>
 
     <div
-        class="url-text"
-        id="scannedURL">
-        Loading...
-    </div>
-
-</div>
-
-
-<!-- RISK -->
-
-<div
-    class="risk-panel"
-    id="riskPanel">
-
-    <div>
-
-        <div
-            class="risk-circle"
-            id="riskCircle">
-
-            <div
-                class="score"
-                id="score">
-                0/9
-            </div>
-
-            <span>
-                Risk Score
-            </span>
-
-        </div>
+        class="checks"
+        id="checks">
 
     </div>
 
 
-    <div class="risk-info">
+    <!-- VIRUSTOTAL -->
 
-        <div
-            class="risk-badge"
-            id="riskBadge">
-            ANALYZING
-        </div>
+    <div class="vt-section">
 
-        <h2 id="riskTitle">
-            Security Analysis
-        </h2>
+        <div class="vt-header">
 
-        <p id="riskMessage">
-            Analyzing the submitted URL...
-        </p>
-
-        <div class="progress">
+            <h2>
+                🦠 Online Reputation Analysis
+            </h2>
 
             <div
-                class="progress-bar"
-                id="progressBar">
+                class="vt-status"
+                id="vtStatus">
+
+                🔄 Connecting to VirusTotal...
+
             </div>
 
         </div>
 
-    </div>
 
-</div>
+        <div class="vt-grid">
+
+            <div class="vt-card">
+
+                <div
+                    class="vt-number"
+                    id="malicious">
+
+                    —
+
+                </div>
+
+                <div class="vt-label">
+                    Malicious
+                </div>
+
+            </div>
 
 
-<!-- DETECTION CHECKS -->
+            <div class="vt-card">
 
-<h2 class="section-title">
-    🔍 Detection Checks
-</h2>
+                <div
+                    class="vt-number"
+                    id="suspicious">
 
-<div
-    class="checks"
-    id="checks">
+                    —
 
-</div>
+                </div>
+
+                <div class="vt-label">
+                    Suspicious
+                </div>
+
+            </div>
 
 
-<!-- VIRUSTOTAL -->
+            <div class="vt-card">
 
-<div class="vt-section">
+                <div
+                    class="vt-number"
+                    id="harmless">
 
-    <div class="vt-header">
+                    —
 
-        <h2>
-            🦠 Online Reputation Analysis
-        </h2>
+                </div>
+
+                <div class="vt-label">
+                    Harmless
+                </div>
+
+            </div>
+
+
+            <div class="vt-card">
+
+                <div
+                    class="vt-number"
+                    id="undetected">
+
+                    —
+
+                </div>
+
+                <div class="vt-label">
+                    Undetected
+                </div>
+
+            </div>
+
+        </div>
+
 
         <div
-            class="vt-status"
-            id="vtStatus">
-            🔄 Checking...
+            class="error-box"
+            id="errorBox">
+
         </div>
 
     </div>
 
 
- <div class="vt-grid">
+    <!-- BUTTON -->
 
-    <div class="vt-card">
-        <div class="vt-number" id="malicious">—</div>
-        <div class="vt-label">Malicious</div>
+    <div class="buttons">
+
+        <button
+            class="back-button"
+            onclick="goBack()">
+
+            ↩️ Scan Another URL
+
+        </button>
+
     </div>
 
-    <div class="vt-card">
-        <div class="vt-number" id="suspicious">—</div>
-        <div class="vt-label">Suspicious</div>
+
+    <div class="footer">
+
+        SmartPhish © 2026 |
+        Computer Science Student Project
+
     </div>
 
-    <div class="vt-card">
-        <div class="vt-number" id="harmless">—</div>
-        <div class="vt-label">Harmless</div>
-    </div>
-
-    <div class="vt-card">
-        <div class="vt-number" id="undetected">—</div>
-        <div class="vt-label">Undetected</div>
-    </div>
 
 </div>
 
-          
-
-          
-        
-
-</div>
-
-
-<!-- BUTTON -->
-
-<div class="buttons">
-
-    <button
-        class="back-button"
-        onclick="goBack()">
-
-        ↩️ Scan Another URL
-
-    </button>
-
-</div>
-
-
-<div class="footer">
-
-    SmartPhish © 2026 |
-    Computer Science Student Project
-
-</div>
-```
-
-</div>
 
 <script>
 
-    /* =========================
-       LOAD LOCAL RESULT
-    ========================= */
 
-    var localResult =
-        JSON.parse(
-            sessionStorage.getItem(
-                "smartphishResult"
-            )
+/* ==========================================
+   GET URL
+========================================== */
+
+var localResult = null;
+
+try {
+
+    var storedLocal =
+        sessionStorage.getItem(
+            "smartphishResult"
         );
 
+    if (storedLocal) {
 
-    var urlParams =
-        new URLSearchParams(
-            window.location.search
-        );
-
-    var scannedURL =
-        urlParams.get("url");
-
-
-    if (!scannedURL && localResult) {
-
-        scannedURL =
-            localResult.url;
+        localResult =
+            JSON.parse(storedLocal);
 
     }
+
+}
+catch (error) {
+
+    console.log(
+        "Could not read local result."
+    );
+
+}
+
+
+var urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+var scannedURL =
+    urlParams.get("url");
+
+
+if (!scannedURL && localResult) {
+
+    scannedURL =
+        localResult.url;
+
+}
+
+
+document.getElementById(
+    "scannedURL"
+).textContent =
+    scannedURL || "Unknown URL";
+
+
+/* ==========================================
+   SHOW LOCAL RESULT
+========================================== */
+
+if (localResult) {
+
+    var score =
+        Number(localResult.score) || 0;
 
 
     document.getElementById(
-        "scannedURL"
+        "score"
     ).textContent =
-        scannedURL || "Unknown URL";
+        score + "/9";
 
 
-    /* =========================
-       SHOW LOCAL RESULT
-    ========================= */
-
-    if (localResult) {
-
-        var score =
-            Number(localResult.score) || 0;
-
-        var finalResult =
-            localResult.finalResult ||
-            "LOW RISK";
-
-
-        document.getElementById(
-            "score"
-        ).textContent =
-            score + "/9";
-
-
-        var percentage =
-            Math.min(
-                (score / 9) * 100,
-                100
-            );
-
-
-        document.getElementById(
-            "progressBar"
-        ).style.width =
-            percentage + "%";
-
-
-        var badge =
-            document.getElementById(
-                "riskBadge"
-            );
-
-
-        var circle =
-            document.getElementById(
-                "riskCircle"
-            );
-
-
-        var panel =
-            document.getElementById(
-                "riskPanel"
-            );
-
-
-        var bar =
-            document.getElementById(
-                "progressBar"
-            );
-
-
-        var title =
-            document.getElementById(
-                "riskTitle"
-            );
-
-
-        var message =
-            document.getElementById(
-                "riskMessage"
-            );
-
-
-        if (score >= 4) {
-
-            badge.textContent =
-                "🚨 HIGH RISK";
-
-            badge.style.background =
-                "#fee2e2";
-
-            badge.style.color =
-                "#b91c1c";
-
-            circle.style.borderColor =
-                "#ef4444";
-
-            bar.style.background =
-                "#ef4444";
-
-            panel.style.background =
-                "#fff7f7";
-
-            title.textContent =
-                "Potential Phishing Risk";
-
-            message.textContent =
-                "Multiple warning signs were detected. Avoid entering sensitive information unless you can verify the website.";
-
-        }
-
-        else if (score >= 2) {
-
-            badge.textContent =
-                "⚠️ SUSPICIOUS";
-
-            badge.style.background =
-                "#fef3c7";
-
-            badge.style.color =
-                "#b45309";
-
-            circle.style.borderColor =
-                "#f59e0b";
-
-            bar.style.background =
-                "#f59e0b";
-
-            panel.style.background =
-                "#fffdf5";
-
-            title.textContent =
-                "Suspicious URL Detected";
-
-            message.textContent =
-                "Some characteristics of this URL require caution. Verify the website before continuing.";
-
-        }
-
-        else {
-
-            badge.textContent =
-                "✅ LOW RISK";
-
-            badge.style.background =
-                "#dcfce7";
-
-            badge.style.color =
-                "#15803d";
-
-            circle.style.borderColor =
-                "#22c55e";
-
-            bar.style.background =
-                "#22c55e";
-
-            panel.style.background =
-                "#f7fff9";
-
-            title.textContent =
-                "No Major Warning Signs";
-
-            message.textContent =
-                "The URL passed the local security checks. This does not guarantee that the website is completely safe.";
-
-        }
-
-
-        /* =========================
-           DETECTION CHECKS
-        ========================= */
-
-        var checksContainer =
-            document.getElementById(
-                "checks"
-            );
-
-
-        checksContainer.innerHTML = "";
-
-
-        if (localResult.checks) {
-
-            for (
-                var i = 0;
-                i < localResult.checks.length;
-                i++
-            ) {
-
-                var check =
-                    localResult.checks[i];
-
-
-                var card =
-                    document.createElement(
-                        "div"
-                    );
-
-                card.className =
-                    "check-card";
-
-
-                var statusText =
-                    check.status
-                    ? "✅ Passed"
-                    : "⚠️ Warning";
-
-
-                var statusColor =
-                    check.status
-                    ? "#15803d"
-                    : "#b45309";
-
-
-                card.innerHTML =
-
-                    "<div class='check-name'>" +
-
-                    check.name +
-
-                    "</div>" +
-
-                    "<div class='check-status' style='color:" +
-
-                    statusColor +
-
-                    "'>" +
-
-                    statusText +
-
-                    "</div>";
-
-
-                checksContainer.appendChild(
-                    card
-                );
-
-            }
-
-        }
-
-    }
-
-
-    /* =========================
-       VIRUSTOTAL RESULT
-    ========================= */
-
-    var savedVT =
-        sessionStorage.getItem(
-            "virusTotalResult"
+    var percentage =
+        Math.min(
+            (score / 9) * 100,
+            100
         );
 
 
-    if (savedVT) {
-
-        try {
-
-            var vt =
-                JSON.parse(savedVT);
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+        percentage + "%";
 
 
-            if (vt.success) {
-
-                document.getElementById(
-                    "malicious"
-                ).textContent =
-                    vt.malicious || 0;
+    var badge =
+        document.getElementById(
+            "riskBadge"
+        );
 
 
-                document.getElementById(
-                    "suspicious"
-                ).textContent =
-                    vt.suspicious || 0;
+    var circle =
+        document.getElementById(
+            "riskCircle"
+        );
 
 
-                document.getElementById(
-                    "harmless"
-                ).textContent =
-                    vt.harmless || 0;
+    var panel =
+        document.getElementById(
+            "riskPanel"
+        );
 
 
-                document.getElementById(
-                    "undetected"
-                ).textContent =
-                    vt.undetected || 0;
+    var bar =
+        document.getElementById(
+            "progressBar"
+        );
 
 
-                document.getElementById(
-                    "vtStatus"
-                ).textContent =
-                    "✅ Analysis Complete";
-
-            }
-
-            else {
-
-                document.getElementById(
-                    "vtStatus"
-                ).textContent =
-                    "⚠️ Scan Unavailable";
-
-            }
-
-        }
-
-        catch (error) {
-
-            document.getElementById(
-                "vtStatus"
-            ).textContent =
-                "⚠️ Invalid Result";
-
-        }
-
-    }
+    var title =
+        document.getElementById(
+            "riskTitle"
+        );
 
 
-    /* =========================
-       BACK BUTTON
-    ========================= */
+    var message =
+        document.getElementById(
+            "riskMessage"
+        );
 
-    function goBack() {
 
-        window.location.href =
-            "index.html";
+    if (score >= 4) {
+
+        badge.textContent =
+            "🚨 HIGH RISK";
+
+        badge.style.background =
+            "#fee2e2";
+
+        badge.style.color =
+            "#b91c1c";
+
+        circle.style.borderColor =
+            "#ef4444";
+
+        bar.style.background =
+            "#ef4444";
+
+        panel.style.background =
+            "#fff7f7";
+
+        title.textContent =
+            "Potential Phishing Risk";
+
+        message.textContent =
+            "Multiple warning signs were detected. Avoid entering sensitive information unless you can verify the website.";
 
     }
 
 
-    /* =========================
-       ONLINE VIRUSTOTAL SCAN
-    ========================= */
-    /* =========================
-   ONLINE VIRUSTOTAL SCAN
-========================= */
+    else if (score >= 2) {
 
-if (scannedURL) {
+        badge.textContent =
+            "⚠️ SUSPICIOUS";
 
-    setTimeout(function () {
+        badge.style.background =
+            "#fef3c7";
 
-        fetch(
-            "https://smartphish-backend.onrender.com/scan",
-            {
-                method: "POST",
+        badge.style.color =
+            "#b45309";
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+        circle.style.borderColor =
+            "#f59e0b";
 
-                body: JSON.stringify({
-                    url: scannedURL
-                })
-            }
-        )
+        bar.style.background =
+            "#f59e0b";
 
-        .then(function (response) {
+        panel.style.background =
+            "#fffdf5";
 
-            return response.json();
+        title.textContent =
+            "Suspicious URL Detected";
 
-        })
+        message.textContent =
+            "Some characteristics of this URL require caution. Verify the website before continuing.";
 
-        .then(function (data) {
+    }
 
-            sessionStorage.setItem(
-                "virusTotalResult",
-                JSON.stringify(data)
+
+    else {
+
+        badge.textContent =
+            "✅ LOW RISK";
+
+        badge.style.background =
+            "#dcfce7";
+
+        badge.style.color =
+            "#15803d";
+
+        circle.style.borderColor =
+            "#22c55e";
+
+        bar.style.background =
+            "#22c55e";
+
+        panel.style.background =
+            "#f7fff9";
+
+        title.textContent =
+            "No Major Warning Signs";
+
+        message.textContent =
+            "The URL passed the local security checks. This does not guarantee that the website is completely safe.";
+
+    }
+
+
+    /* ==========================================
+       DETECTION CHECKS
+    ========================================== */
+
+    var checksContainer =
+        document.getElementById(
+            "checks"
+        );
+
+
+    checksContainer.innerHTML = "";
+
+
+    if (localResult.checks &&
+        Array.isArray(localResult.checks)) {
+
+
+        for (
+            var i = 0;
+            i < localResult.checks.length;
+            i++
+        ) {
+
+            var check =
+                localResult.checks[i];
+
+
+            var card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "check-card";
+
+
+            var statusText =
+                check.status
+                ? "✅ Passed"
+                : "⚠️ Warning";
+
+
+            var statusColor =
+                check.status
+                ? "#15803d"
+                : "#b45309";
+
+
+            card.innerHTML =
+
+                "<div class='check-name'>" +
+
+                check.name +
+
+                "</div>" +
+
+                "<div class='check-status' style='color:" +
+
+                statusColor +
+
+                "'>" +
+
+                statusText +
+
+                "</div>";
+
+
+            checksContainer.appendChild(
+                card
             );
 
-            if (data.success) {
+        }
 
-                document.getElementById(
-                    "malicious"
-                ).textContent =
-                    data.malicious || 0;
-
-                document.getElementById(
-                    "suspicious"
-                ).textContent =
-                    data.suspicious || 0;
-
-                document.getElementById(
-                    "harmless"
-                ).textContent =
-                    data.harmless || 0;
-
-                document.getElementById(
-                    "undetected"
-                ).textContent =
-                    data.undetected || 0;
-
-                document.getElementById(
-                    "vtStatus"
-                ).textContent =
-                    "✅ Analysis Complete";
-
-            }
-
-            else {
-
-                document.getElementById(
-                    "vtStatus"
-                ).textContent =
-                    "⚠️ Scan Unavailable";
-
-            }
-
-        })
-
-        .catch(function (error) {
-
-            document.getElementById(
-                "vtStatus"
-            ).textContent =
-                "⚠️ Could not connect";
-
-            console.log(error);
-
-        });
-
-    }, 100);
+    }
 
 }
+
+
+/* ==========================================
+   VIRUSTOTAL ELEMENTS
+========================================== */
+
+var vtStatus =
+    document.getElementById(
+        "vtStatus"
+    );
+
+
+var errorBox =
+    document.getElementById(
+        "errorBox"
+    );
+
+
+/* ==========================================
+   VIRUSTOTAL SCAN
+========================================== */
+
+function scanWithVirusTotal() {
+
+    if (!scannedURL) {
+
+        vtStatus.textContent =
+            "⚠️ No URL available";
+
+        return;
+
+    }
+
+
+    vtStatus.textContent =
+        "🔄 Checking VirusTotal...";
+
+
+    errorBox.style.display =
+        "none";
+
+
+    console.log(
+        "Sending URL to backend:",
+        scannedURL
+    );
+
+
+    fetch(
+        "https://smartphish-backend.onrender.com/scan",
+        {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type":
+                    "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                url: scannedURL
+
+            })
+
+        }
+
+    )
+
+    .then(function(response) {
+
+        return response.json()
+            .then(function(data) {
+
+                return {
+
+                    ok: response.ok,
+
+                    data: data
+
+                };
+
+            });
+
+    })
+
+
+    .then(function(result) {
+
+        var data =
+            result.data;
+
+
+        console.log(
+            "Backend response:",
+            data
+        );
+
+
+        sessionStorage.setItem(
+            "virusTotalResult",
+            JSON.stringify(data)
+        );
+
+
+        /* =================================
+           SUCCESS
+        ================================= */
+
+        if (result.ok && data.success) {
+
+            document.getElementById(
+                "malicious"
+            ).textContent =
+                Number(data.malicious) || 0;
+
+
+            document.getElementById(
+                "suspicious"
+            ).textContent =
+                Number(data.suspicious) || 0;
+
+
+            document.getElementById(
+                "harmless"
+            ).textContent =
+                Number(data.harmless) || 0;
+
+
+            document.getElementById(
+                "undetected"
+            ).textContent =
+                Number(data.undetected) || 0;
+
+
+            vtStatus.textContent =
+                "✅ Analysis Complete";
+
+
+            errorBox.style.display =
+                "none";
+
+
+            return;
+
+        }
+
+
+        /* =================================
+           ERROR FROM BACKEND
+        ================================= */
+
+        vtStatus.textContent =
+            "⚠️ Scan Unavailable";
+
+
+        var errorMessage =
+            data.error ||
+            "VirusTotal could not complete the scan.";
+
+
+        if (data.details) {
+
+            errorMessage +=
+                "<br><br>" +
+                data.details;
+
+        }
+
+
+        errorBox.innerHTML =
+            errorMessage;
+
+
+        errorBox.style.display =
+            "block";
+
+    })
+
+
+    .catch(function(error) {
+
+        console.log(
+            "Frontend error:",
+            error
+        );
+
+
+        vtStatus.textContent =
+            "⚠️ Connection Error";
+
+
+        errorBox.textContent =
+            "Could not connect to the SmartPhish backend.";
+
+
+        errorBox.style.display =
+            "block";
+
+    });
+
+}
+
+
+/* ==========================================
+   BACK BUTTON
+========================================== */
+
+function goBack() {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* ==========================================
+   START VIRUSTOTAL SCAN
+========================================== */
+
+scanWithVirusTotal();
+
+
 </script>
-</body> 
+
+</body>
+
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
